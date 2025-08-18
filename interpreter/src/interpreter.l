@@ -33,10 +33,21 @@ package org.unp.plp.interprete;
 
 %%
 
+world { return Parser.WORLD; }
+put { return Parser.PUT; }
+in { return Parser.IN; }
+hero { return Parser.HERO; }
+
 [0-9]+
    {  yyparser.yylval = new Integer(yytext());
       return Parser.CONSTANT;
    }
+
+[x\(\),] 
+  {
+    yyparser.yylval = yytext();
+    return yytext().charAt(0);
+  }
 
 \r|\n|\r\n
   { // lleva la cuenta de lineas

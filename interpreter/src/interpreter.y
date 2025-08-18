@@ -5,18 +5,23 @@
   import java.io.*;
   import java.util.List;
   import java.util.ArrayList;
+  import org.unp.plp.interprete.WumpusWorld; 
 %}
 
 
 // lista de tokens por orden de prioridad
-
+    
 %token NL         // nueva línea
 %token CONSTANT   // constante
+%token WORLD
+%token PUT IN
+%token HERO
+%token PAR_ABRE PAR_CIERRA SEP_CELDA
 
 %%
 
 program
-  : statement_list            // Lista de sentencias
+  : world_stmt statement_list            // Lista de sentencias
   |                           // Programa vacio
   ;
 
@@ -27,8 +32,22 @@ statement_list
 
 statement
   : CONSTANT NL {System.out.println("constante: "+ $1); $$ = $1;}
+  | put_stmt
+  | NL
   ;
 
+world_stmt
+  : WORLD CONSTANT 'x' CONSTANT NL { world = WumpusWorld.crear((int)$2, (int)$4); }
+  ;
+
+put_stmt
+  : PUT elem IN '(' CONSTANT ',' CONSTANT ')' NL { world.agregarElemento($2, getCelda($5, $7)); } 
+  ;
+
+elem 
+  : HERO { $$ = ELEMENTO.HERO; }
+  | GOLD { $$ = ELEMENTO.GOLD; }
+  ;
 
 %%
 
@@ -43,7 +62,6 @@ statement
   public Parser(Reader r)
   {
      lexer = new Lexer(r, this);
-     world = new WumpusWorld();
   }
 
   /** esta función se invoca por el analizador cuando necesita el
