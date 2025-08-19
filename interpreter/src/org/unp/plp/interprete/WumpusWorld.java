@@ -17,6 +17,7 @@ public class WumpusWorld {
   public WumpusWorld(int filas, int columnas) {
     this.filas = filas;
     this.columnas = columnas;
+    this.celdas = new Celda[filas][columnas];
 
     for (int i = 0; i < filas; i++)
       for (int j = 0; j < columnas; j++)
@@ -66,7 +67,7 @@ class Celda {
     return j;
   }
 
-  public Elemento getElemento() {
+  public ELEMENTO getElemento() {
     return elemento;
   }
 

@@ -39,7 +39,7 @@ in { return Parser.IN; }
 hero { return Parser.HERO; }
 
 [0-9]+
-   {  yyparser.yylval = new Integer(yytext());
+   {  yyparser.yylval = Integer.valueOf(yytext());
       return Parser.CONSTANT;
    }
 

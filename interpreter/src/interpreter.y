@@ -41,7 +41,7 @@ world_stmt
   ;
 
 put_stmt
-  : PUT elem IN '(' CONSTANT ',' CONSTANT ')' NL { world.agregarElemento($2, getCelda($5, $7)); } 
+  : PUT elem IN '(' CONSTANT ',' CONSTANT ')' NL { world.agregarElemento((ELEMENTO)$2, world.getCelda((int)$5, (int)$7)); } 
   ;
 
 elem 
