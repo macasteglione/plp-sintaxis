@@ -37,6 +37,10 @@ world { return Parser.WORLD; }
 put { return Parser.PUT; }
 in { return Parser.IN; }
 hero { return Parser.HERO; }
+gold { return Parser.GOLD; }
+pit { return Parser.PIT; }
+wumpus { return Parser.WUMPUS; }
+display { return Parser.DISPLAY; }
 
 [0-9]+
    {  yyparser.yylval = Integer.valueOf(yytext());

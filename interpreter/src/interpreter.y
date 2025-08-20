@@ -15,8 +15,9 @@
 %token CONSTANT   // constante
 %token WORLD
 %token PUT IN
-%token HERO
+%token HERO GOLD WUMPUS PIT
 %token PAR_ABRE PAR_CIERRA SEP_CELDA
+%token DISPLAY
 
 %%
 
@@ -33,6 +34,7 @@ statement_list
 statement
   : CONSTANT NL {System.out.println("constante: "+ $1); $$ = $1;}
   | put_stmt
+  | print_stmt
   | NL
   ;
 
@@ -44,9 +46,15 @@ put_stmt
   : PUT elem IN '(' CONSTANT ',' CONSTANT ')' NL { world.agregarElemento((ELEMENTO)$2, world.getCelda((int)$5, (int)$7)); } 
   ;
 
+print_stmt
+  : DISPLAY { world.print(); }
+  ;
+
 elem 
   : HERO { $$ = ELEMENTO.HERO; }
   | GOLD { $$ = ELEMENTO.GOLD; }
+  | WUMPUS { $$ = ELEMENTO.WUMPUS; }
+  | PIT { $$ = ELEMENTO.PIT; }
   ;
 
 %%
