@@ -18,12 +18,14 @@
 %token HERO GOLD WUMPUS PIT
 %token PAR_ABRE PAR_CIERRA SEP_CELDA
 %token DISPLAY
+%token I J
+%token SUMA RESTA DIV PROD
+%token IGUAL MENOR MENOR_IGUAL MAYOR MAYOR_IGUAL DISTINTO
 
 %%
 
 program
-  : world_stmt statement_list            // Lista de sentencias
-  |                           // Programa vacio
+  : world_stmt statement_list // Lista de sentencias
   ;
 
 statement_list
@@ -32,9 +34,9 @@ statement_list
   ;
 
 statement
-  : CONSTANT NL {System.out.println("constante: "+ $1); $$ = $1;}
+  : CONSTANT NL { System.out.println("constante: "+ $1); $$ = $1; }
   | put_stmt
-  | print_stmt
+  | display_stmt
   | NL
   ;
 
@@ -43,10 +45,20 @@ world_stmt
   ;
 
 put_stmt
-  : PUT elem IN '(' CONSTANT ',' CONSTANT ')' NL { world.agregarElemento((ELEMENTO)$2, world.getCelda((int)$5, (int)$7)); } 
+  : PUT elem IN '(' CONSTANT ',' CONSTANT ')' NL { world.agregarElemento((ELEMENTO)$2, world.getCelda((int)$5, (int)$7)); }
+  | PUT PIT IN '[' cond_list ']'
   ;
 
-print_stmt
+cond_list
+  : cond //{ $$ = $1; }
+  | cond ',' cond_list //{ $$ = ($1 && $3); }
+  ;
+
+cond
+  : expr operador expr //{ $$ = world.eval(); }
+  ;
+
+display_stmt
   : DISPLAY { world.print(); }
   ;
 
@@ -55,6 +67,41 @@ elem
   | GOLD { $$ = ELEMENTO.GOLD; }
   | WUMPUS { $$ = ELEMENTO.WUMPUS; }
   | PIT { $$ = ELEMENTO.PIT; }
+  ;
+
+operador
+  : IGUAL 
+  | DISTINTO
+  | MAYOR
+  | MAYOR_IGUAL
+  | MENOR
+  | MENOR_IGUAL
+  ;
+
+expr
+  : expr operador_princ term
+  | term
+  ;
+
+term
+  : term operador_sec factor
+  | factor
+  ;
+
+factor
+  : CONSTANT
+  | J
+  | I
+  ;
+
+operador_princ
+  : SUMA
+  | RESTA
+  ;
+
+operador_sec
+  : DIV
+  | PROD
   ;
 
 %%

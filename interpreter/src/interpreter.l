@@ -41,13 +41,24 @@ gold { return Parser.GOLD; }
 pit { return Parser.PIT; }
 wumpus { return Parser.WUMPUS; }
 display { return Parser.DISPLAY; }
+i { return Parser.I; }
+j { return Parser.J; }
+\+ { return Parser.SUMA; }
+\- { return Parser.RESTA; }
+\* { return Parser.PROD; }
+\/ { return Parser.DIV; }
+\> { return Parser.MAYOR; }
+\>= { return Parser.MAYOR_IGUAL; }
+\< { return Parser.MENOR; }
+\<= { return Parser.MENOR_IGUAL; }
+\!= { return Parser.DISTINTO; }
 
 [0-9]+
    {  yyparser.yylval = Integer.valueOf(yytext());
       return Parser.CONSTANT;
    }
 
-[x\(\),] 
+[x,\(\)\[\]] 
   {
     yyparser.yylval = yytext();
     return yytext().charAt(0);
