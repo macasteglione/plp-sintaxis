@@ -43,10 +43,12 @@ wumpus { return Parser.WUMPUS; }
 display { return Parser.DISPLAY; }
 i { return Parser.I; }
 j { return Parser.J; }
+
 \+ { return Parser.SUMA; }
 \- { return Parser.RESTA; }
 \* { return Parser.PROD; }
 \/ { return Parser.DIV; }
+= { return Parser.IGUAL; }
 \> { return Parser.MAYOR; }
 \>= { return Parser.MAYOR_IGUAL; }
 \< { return Parser.MENOR; }

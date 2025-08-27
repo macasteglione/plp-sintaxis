@@ -51,6 +51,30 @@ public class WumpusWorld {
         elementos.put(celda.getCoordenadas(), elem);
     }
 
+    public void agregarElemento(ELEMENTO elem, ConditionList condiciones) {
+        int elementosAgregados = 0;
+
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                if (condiciones.evaluateAll(i, j)) {
+                    Celda celda = getCelda(i, j);
+                    if (celda != null) {
+                        // Para el héroe, solo permitir uno
+                        if (elem == ELEMENTO.HERO && elementos.containsValue(elem)) {
+                            System.out.println("Ya existe un héroe en el mundo, saltando posición (" + i + ", " + j + ")");
+                            continue;
+                        }
+
+                        celda.setElemento(elem);
+                        elementos.put(celda.getCoordenadas(), elem);
+                        elementosAgregados++;
+                        System.out.println("Agregado " + elem + " en (" + i + ", " + j + ")");
+                    }
+                }
+            }
+        }
+    }
+
     public void removerElemento(ELEMENTO elem, Celda celda) {
         if (celda == null) {
             return;

@@ -5,7 +5,9 @@
   import java.io.*;
   import java.util.List;
   import java.util.ArrayList;
-  import org.unp.plp.interprete.WumpusWorld; 
+  import org.unp.plp.interprete.WumpusWorld;
+  import org.unp.plp.interprete.Condition;
+  import org.unp.plp.interprete.ConditionList;
 %}
 
 
@@ -21,6 +23,9 @@
 %token I J
 %token SUMA RESTA DIV PROD
 %token IGUAL MENOR MENOR_IGUAL MAYOR MAYOR_IGUAL DISTINTO
+
+%left SUMA RESTA
+%left PROD DIV
 
 %%
 
@@ -46,16 +51,27 @@ world_stmt
 
 put_stmt
   : PUT elem IN '(' CONSTANT ',' CONSTANT ')' NL { world.agregarElemento((ELEMENTO)$2, world.getCelda((int)$5, (int)$7)); }
-  | PUT PIT IN '[' cond_list ']'
+  | PUT PIT IN '[' cond_list ']' NL { world.agregarElemento((ELEMENTO)$2, (ConditionList)$5); }
   ;
 
 cond_list
-  : cond //{ $$ = $1; }
-  | cond ',' cond_list //{ $$ = ($1 && $3); }
+  : cond { 
+      ConditionList list = new ConditionList();
+      list.addCondition((Condition)$1);
+      $$ = list;
+    }
+  | cond ',' cond_list { 
+      ConditionList list = (ConditionList)$3;
+      list.addCondition((Condition)$1);
+      $$ = list;
+    }
   ;
 
 cond
-  : expr operador expr //{ $$ = world.eval(); }
+  : I operador_comp expr { $$ = new Condition('i', (String)$2, (int)$3); }
+  | J operador_comp expr { $$ = new Condition('j', (String)$2, (int)$3); }
+  | I IGUAL expr { $$ = new Condition('i', "=", (int)$3); }
+  | J IGUAL expr { $$ = new Condition('j', "=", (int)$3); }
   ;
 
 display_stmt
@@ -69,39 +85,29 @@ elem
   | PIT { $$ = ELEMENTO.PIT; }
   ;
 
-operador
-  : IGUAL 
-  | DISTINTO
-  | MAYOR
-  | MAYOR_IGUAL
-  | MENOR
-  | MENOR_IGUAL
+operador_comp
+  : MENOR { $$ = "<"; }
+  | MENOR_IGUAL { $$ = "<="; }
+  | MAYOR { $$ = ">"; }
+  | MAYOR_IGUAL { $$ = ">="; }
+  | DISTINTO { $$ = "!="; }
   ;
 
 expr
-  : expr operador_princ term
-  | term
+  : expr SUMA term { $$ = (int)$1 + (int)$3; }
+  | expr RESTA term { $$ = (int)$1 - (int)$3; }
+  | term { $$ = $1; }
   ;
 
 term
-  : term operador_sec factor
-  | factor
+  : term PROD factor { $$ = (int)$1 * (int)$3; }
+  | term DIV factor { $$ = (int)$1 / (int)$3; }
+  | factor { $$ = $1; }
   ;
 
 factor
-  : CONSTANT
-  | J
-  | I
-  ;
-
-operador_princ
-  : SUMA
-  | RESTA
-  ;
-
-operador_sec
-  : DIV
-  | PROD
+  : CONSTANT { $$ = $1; }
+  | '(' expr ')' { $$ = $2; }
   ;
 
 %%
