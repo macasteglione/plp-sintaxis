@@ -3,7 +3,7 @@ package org.unp.plp.interprete;
 import java.util.ArrayList;
 import java.util.List;
 
-class ConditionList {
+public class ConditionList {
 
     private final List<Condition> conditions = new ArrayList<>();
 

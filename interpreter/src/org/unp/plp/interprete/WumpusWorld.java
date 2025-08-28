@@ -10,7 +10,7 @@ public class WumpusWorld {
     private final TreeMap<String, ELEMENTO> elementos;
 
     private boolean isInsideMatrix(int _fila, int _columna) {
-        if ((_fila < filas && _fila > 0) && (_columna > 0 && _columna < columnas)) {
+        if ((_fila >= 0 && _fila < filas) && (_columna >= 0 && _columna < columnas)) {
             return true;
         }
 
@@ -52,14 +52,11 @@ public class WumpusWorld {
     }
 
     public void agregarElemento(ELEMENTO elem, ConditionList condiciones) {
-        int elementosAgregados = 0;
-
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 if (condiciones.evaluateAll(i, j)) {
                     Celda celda = getCelda(i, j);
                     if (celda != null) {
-                        // Para el héroe, solo permitir uno
                         if (elem == ELEMENTO.HERO && elementos.containsValue(elem)) {
                             System.out.println("Ya existe un héroe en el mundo, saltando posición (" + i + ", " + j + ")");
                             continue;
@@ -67,8 +64,6 @@ public class WumpusWorld {
 
                         celda.setElemento(elem);
                         elementos.put(celda.getCoordenadas(), elem);
-                        elementosAgregados++;
-                        System.out.println("Agregado " + elem + " en (" + i + ", " + j + ")");
                     }
                 }
             }

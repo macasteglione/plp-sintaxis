@@ -1,6 +1,6 @@
 package org.unp.plp.interprete;
 
-class Condition {
+public class Condition {
 
     public char variable;  // 'i' o 'j'
     public String operator;  // "=", "<", "<=", ">", ">=", "!="

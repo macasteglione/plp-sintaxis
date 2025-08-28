@@ -51,7 +51,7 @@ world_stmt
 
 put_stmt
   : PUT elem IN '(' CONSTANT ',' CONSTANT ')' NL { world.agregarElemento((ELEMENTO)$2, world.getCelda((int)$5, (int)$7)); }
-  | PUT PIT IN '[' cond_list ']' NL { world.agregarElemento((ELEMENTO)$2, (ConditionList)$5); }
+  | PUT elem IN '[' cond_list ']' NL { world.agregarElemento((ELEMENTO)$2, (ConditionList)$5); }
   ;
 
 cond_list
